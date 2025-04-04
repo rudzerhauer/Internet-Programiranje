@@ -46,6 +46,7 @@ public class Proizvodjac {
     public String getEmail() {
         return this.email;
     }
+    @SuppressWarnings("rawtypes")
     public List getVozila() {
         return this.vozila;
     }

@@ -17,12 +17,6 @@ import jakarta.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Vozilo {
-
-    public Vozilo(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac) {
-        this.idVozila = idVozila;
-        this.cijenaNabavke = cijenaNabavke;
-        this.proizvodjac = proizvodjac;
-    }
     public Vozilo() {}
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -32,11 +26,20 @@ public abstract class Vozilo {
     @ManyToOne
     @JoinColumn(name = "proizvodjac_id")
     private Proizvodjac proizvodjac;
-
+    private String slikaPutanja;
 
     private boolean pokvareno;
     @OneToMany(mappedBy="vozilo", cascade= CascadeType.ALL)
     private List<Kvar> kvarovi = new ArrayList<>();
+    @OneToMany(mappedBy="vozilo", cascade = CascadeType.ALL)
+    private List<Iznajmljivanje> iznajmljivanja = new ArrayList<>();
+
+    public Vozilo(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac) {
+        this.idVozila = idVozila;
+        this.cijenaNabavke = cijenaNabavke;
+        this.proizvodjac = proizvodjac;
+    }
+   
 
 
 
@@ -52,6 +55,7 @@ public abstract class Vozilo {
     public boolean isPokvareno() {
         return this.pokvareno;
     }
+    @SuppressWarnings("rawtypes")
     public List getKvarovi() {
         return this.kvarovi;
     }
@@ -66,6 +70,18 @@ public abstract class Vozilo {
     }
     public void setKvarovi(List<Kvar> kvarovi) {
         this.kvarovi = kvarovi;
+    }
+
+    public String getSlikaPutanja() {
+        return slikaPutanja;
+    }
+
+    public List<Iznajmljivanje> getIznajmljivanja() {
+        return iznajmljivanja;
+    }
+
+    public void setIznajmljivanja(List<Iznajmljivanje> iznajmljivanja) {
+        this.iznajmljivanja = iznajmljivanja;
     }
 
     

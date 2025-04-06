@@ -3,41 +3,35 @@ package com.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Klijent {
-    
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
 
-    private String ime;
-    private String prezime;
+
+public class Klijent extends Korisnik {
+    
+    
+
+  
+    @Column(name="br_licne_karte")
     private String brLicneKarte;
-    private String email;
-    private String brTelefona;
-    private String slikaAvatara;
+    
+    
     @OneToMany(mappedBy="klijent", cascade=CascadeType.ALL)
-    private List<Iznajmljivanje> iznajmljivanja = new ArrayList<>();
+     @JsonManagedReference  // Mark this as the "managed" side of the relationship
+     private List<Iznajmljivanje> iznajmljivanja = new ArrayList<>();
     
 
-    public Integer getId() {
-        return id;
-    }
+    
 
-    public String getIme() {
-        return ime;
-    }
+    
 
-    public String getPrezime() {
-        return prezime;
-    }
+   
 
     public List<Iznajmljivanje> getIznajmljivanja() {
         return iznajmljivanja;
@@ -51,16 +45,14 @@ public class Klijent {
         return brLicneKarte;
     }
 
-    public String getEmail() {
-        return email;
-    }
-    public String getBrTelefona() {
-        return brTelefona;
+    public void setBrLicneKarte(String brLicneKarte2) {
+        this.brLicneKarte = brLicneKarte2;
     }
 
-    public String getSlikaAvatara() {
-        return slikaAvatara;
-    }
+    
+    
+
+  
     }
     
 

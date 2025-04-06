@@ -2,6 +2,8 @@ package com.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +24,7 @@ public class Proizvodjac {
     private String email;
    // Proizvodjac.java
     @OneToMany(mappedBy = "proizvodjac")
+    @JsonManagedReference
     private List<Vozilo> vozila;
 
 

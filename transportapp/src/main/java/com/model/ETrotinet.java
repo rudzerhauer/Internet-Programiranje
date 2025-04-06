@@ -1,9 +1,13 @@
 package com.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="elektricni_trotinet")
 public class ETrotinet extends Vozilo {
+    @Column(name="maksimalna_brzina")
     private double maksBrzina;
 
     public ETrotinet(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac, double maksBrzina) {

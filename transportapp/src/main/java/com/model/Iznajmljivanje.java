@@ -2,6 +2,9 @@ package com.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,14 +14,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+
+
 public class Iznajmljivanje {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(name="vrijeme_preuzimanja")
     private LocalDateTime vrijemePreuzimanja;
+    @Column(name="vrijeme_vracanja")
     private LocalDateTime vrijemeVracanja;
-    private double trajanje;
+    private Double trajanje;
 
 
     @Embedded
@@ -31,10 +37,12 @@ public class Iznajmljivanje {
     private Vozilo vozilo;
 
     @ManyToOne
-    @JoinColumn(name="id_klijent")
+    @JoinColumn(name="id_korisnik")
+     @JsonBackReference  // Mark this as the "back" side of the relationship, and it will not be serialized
     private Klijent klijent;
-
+    @Column(name="licni_dokument")
     private String licniDokument;
+    @Column(name="vozacka_dozvola")
     private String vozackaDozvola;
 
     private boolean aktivno;
@@ -51,7 +59,7 @@ public class Iznajmljivanje {
         return vrijemeVracanja;
     }
 
-    public double getTrajanje() {
+    public Double getTrajanje() {
         return trajanje;
     }
 

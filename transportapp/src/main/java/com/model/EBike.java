@@ -1,14 +1,16 @@
 package com.model;
 
-import java.sql.Time;
+
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="elektricni_bicikl")
 public class EBike extends Vozilo {
-    Time autonomija;
+    Integer autonomija;
 
-    public EBike(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac, Time autonomija) {
+    public EBike(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac, Integer autonomija) {
         super(idVozila, cijenaNabavke, proizvodjac);
         this.autonomija = autonomija;
 
@@ -17,7 +19,7 @@ public class EBike extends Vozilo {
         super();
     }
 
-    public Time getAutonomija() {
+    public Integer getAutonomija() {
         return this.autonomija;
     }
     

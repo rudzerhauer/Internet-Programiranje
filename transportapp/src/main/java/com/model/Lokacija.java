@@ -6,21 +6,21 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class Lokacija {
 
-    @Column(name = "latitude_preuzimanje", insertable = false, updatable = false)
-    private double latitudePreuzimanje;
+    @Column(name = "latitude_preuzimanja", insertable = false, updatable = false)
+    private Double latitudePreuzimanje;
 
-    @Column(name = "longitude_preuzimanje", insertable = false, updatable = false)
-    private double longitudePreuzimanje;
+    @Column(name = "longitude_preuzimanja", insertable = false, updatable = false)
+    private Double longitudePreuzimanje;
 
-    @Column(name = "latitude_vracanje", insertable = false, updatable = false)
-    private double latitudeVracanje;
+    @Column(name = "latitude_vracanja", insertable = false, updatable = false)
+    private Double latitudeVracanje;
 
-    @Column(name = "longitude_vracanje", insertable = false, updatable = false)
-    private double longitudeVracanje;
+    @Column(name = "longitude_vracanja", insertable = false, updatable = false)
+    private Double longitudeVracanje;
 
     // Getters and setters
 
-    public double getLatitudePreuzimanje() {
+    public Double getLatitudePreuzimanje() {
         return latitudePreuzimanje;
     }
 
@@ -28,7 +28,7 @@ public class Lokacija {
         this.latitudePreuzimanje = latitudePreuzimanje;
     }
 
-    public double getLongitudePreuzimanje() {
+    public Double getLongitudePreuzimanje() {
         return longitudePreuzimanje;
     }
 
@@ -36,7 +36,7 @@ public class Lokacija {
         this.longitudePreuzimanje = longitudePreuzimanje;
     }
 
-    public double getLatitudeVracanje() {
+    public Double getLatitudeVracanje() {
         return latitudeVracanje;
     }
 
@@ -44,7 +44,7 @@ public class Lokacija {
         this.latitudeVracanje = latitudeVracanje;
     }
 
-    public double getLongitudeVracanje() {
+    public Double getLongitudeVracanje() {
         return longitudeVracanje;
     }
 

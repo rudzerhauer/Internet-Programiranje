@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,9 +36,9 @@ public abstract class Vozilo {
     private String slikaPutanja;
 
     private boolean pokvareno;
-    @OneToMany(mappedBy="vozilo", cascade= CascadeType.ALL)
+    @OneToMany(mappedBy="vozilo", cascade= CascadeType.ALL, fetch= FetchType.EAGER)
     private List<Kvar> kvarovi = new ArrayList<>();
-    @OneToMany(mappedBy="vozilo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="vozilo", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private List<Iznajmljivanje> iznajmljivanja = new ArrayList<>();
 
     public Vozilo(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac) {

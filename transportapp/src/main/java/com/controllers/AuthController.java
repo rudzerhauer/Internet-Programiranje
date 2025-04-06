@@ -1,5 +1,9 @@
 package com.controllers;
 
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rest.RegisterRequest;
 import com.rest.UserService;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.validation.Valid;
 
 
@@ -47,6 +53,7 @@ public class AuthController {
         }
     }
     @PostMapping("/login")
+    @SuppressWarnings("UseSpecificCatch")
     public ResponseEntity<?> login(@RequestBody RegisterRequest request) {
         try {
             org.springframework.security.core.Authentication authentication = authenticationManager.authenticate(
@@ -54,7 +61,17 @@ public class AuthController {
                 )
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return ResponseEntity.ok("Prijavljivanje uspjesno");
+            @SuppressWarnings("deprecation")
+            String jwt = Jwts.builder()
+                    .setSubject(request.getUsername())
+                    .claim("role", userService.loadUserByUsername(request.getUsername()).getAuthorities())
+                    .setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24 hours
+                    .signWith(SignatureAlgorithm.HS512, "tajna123")
+                    .compact();
+            Map<String, String> response = new HashMap<>();
+            response.put("token", jwt);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("korisnicko ime ili sifra nisu dobri");
         }

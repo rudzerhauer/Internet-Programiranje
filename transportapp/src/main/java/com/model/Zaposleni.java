@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 public class Zaposleni extends Korisnik {
     
     
-    private RadnoMjesto uloga;
+    private String uloga;
 
 
     
@@ -17,11 +17,11 @@ public class Zaposleni extends Korisnik {
 
     
 
-    public RadnoMjesto getUloga() {
+    public String getUloga() {
         return uloga;
     }
 
-    public void setUloga(RadnoMjesto uloga) {
+    public void setUloga(String uloga) {
         this.uloga = uloga;
     }
 

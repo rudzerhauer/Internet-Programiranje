@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.model.Klijent;
 import com.model.Korisnik;
-import com.model.RadnoMjesto;
 import com.model.Zaposleni;
 import com.repositorys.KorisnikRepository;
 @Service
@@ -34,7 +33,7 @@ public class UserService implements UserDetailsService {
             korisnik = klijent;
         } else if (request.getUloga() != null) {
             Zaposleni zaposleni = new Zaposleni();
-            zaposleni.setUloga(RadnoMjesto.valueOf(request.getUloga()));
+            zaposleni.setUloga(request.getUloga());
             korisnik = zaposleni;
         } else {
             throw new RuntimeException("Korisnik nije specifikovan");

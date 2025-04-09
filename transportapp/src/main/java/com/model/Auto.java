@@ -32,5 +32,14 @@ public class Auto extends Vozilo {
     public String getOpis() {
         return this.opis;
     }
+    public void setDatumNabavke(LocalDate datumNabavke) {
+        this.datumNabavke = datumNabavke;
+    }
+    public void setModel(String model) {
+        this.model = model;
+    }
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
     
 }

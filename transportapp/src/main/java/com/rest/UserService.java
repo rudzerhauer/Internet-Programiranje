@@ -1,7 +1,10 @@
 package com.rest;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,53 +14,69 @@ import org.springframework.stereotype.Service;
 import com.model.Klijent;
 import com.model.Korisnik;
 import com.model.Zaposleni;
+import com.repositorys.KlijentRepository;
 import com.repositorys.KorisnikRepository;
+import com.repositorys.ZaposleniRepository;
+
 @Service
 public class UserService implements UserDetailsService {
-    private final KorisnikRepository korisnikRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(KorisnikRepository korisnikRepository, PasswordEncoder passwordEncoder) {
-        this.korisnikRepository = korisnikRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+    @Autowired
+    private KlijentRepository klijentRepository;
+    @Autowired
+    private ZaposleniRepository zaposleniRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public Korisnik registerUser(RegisterRequest request) {
-        if(korisnikRepository.findByUsername(request.getUsername()).isPresent()){
-            throw new RuntimeException("korisnicko ime vec postoji");
-        }
-        Korisnik korisnik;
-        if(request.getBrLicneKarte() != null) {
+    public void registerUser(RegisterRequest request) {
+        if ("KLIJENT".equalsIgnoreCase(request.getUserType())) {
+            if (request.getBrLicneKarte() == null || request.getBrLicneKarte().isEmpty()) {
+                throw new IllegalArgumentException("ID card number is required for clients");
+            }
             Klijent klijent = new Klijent();
+            klijent.setUsername(request.getUsername());
+            klijent.setPassword(passwordEncoder.encode(request.getPassword()));
+            klijent.setIme(request.getIme());
+            klijent.setPrezime(request.getPrezime());
+            klijent.setBrTelefona(request.getBrTelefona());
+            klijent.setEmail(request.getEmail());
             klijent.setBrLicneKarte(request.getBrLicneKarte());
-            korisnik = klijent;
-        } else if (request.getUloga() != null) {
+            klijentRepository.save(klijent); // Saves to both korisnik and klijent tables
+        } else if ("ZAPOSLENI".equalsIgnoreCase(request.getUserType())) {
+            if (request.getUloga() == null || request.getUloga().isEmpty()) {
+                throw new IllegalArgumentException("Role is required for employees");
+            }
             Zaposleni zaposleni = new Zaposleni();
+            zaposleni.setUsername(request.getUsername());
+            zaposleni.setPassword(passwordEncoder.encode(request.getPassword()));
+            zaposleni.setIme(request.getIme());
+            zaposleni.setPrezime(request.getPrezime());
+            zaposleni.setBrTelefona(request.getBrTelefona());
+            zaposleni.setEmail(request.getEmail());
             zaposleni.setUloga(request.getUloga());
-            korisnik = zaposleni;
+            zaposleniRepository.save(zaposleni); // Saves to both korisnik and zaposleni tables
         } else {
-            throw new RuntimeException("Korisnik nije specifikovan");
+            throw new IllegalArgumentException("Invalid user type. Use 'KLIJENT' or 'ZAPOSLENI'");
         }
-
-        korisnik.setUsername(request.getUsername());
-        korisnik.setPassword(passwordEncoder.encode(request.getPassword()));
-        korisnik.setIme(request.getIme());
-        korisnik.setPrezime(request.getPrezime());
-        korisnik.setBrTelefona(request.getBrTelefona());
-        korisnik.setSlikaAvatara(request.getSlikaAvatara());
-        korisnik.setEmail(request.getEmail());
-
-        return korisnikRepository.save(korisnik);
-
-
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Korisnik korisnik = korisnikRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return new org.springframework.security.core.userdetails.User(korisnik.getUsername(), korisnik.getPassword(), new ArrayList<>());
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        // Check if the user is a Zaposleni or Klijent
+        zaposleniRepository.findById(korisnik.getId()).ifPresent(zaposleni -> 
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + zaposleni.getUloga()))
+        );
+        klijentRepository.findById(korisnik.getId()).ifPresent(klijent -> 
+            authorities.add(new SimpleGrantedAuthority("ROLE_KLIJENT"))
+        );
 
+        return new org.springframework.security.core.userdetails.User(
+            korisnik.getUsername(), korisnik.getPassword(), authorities);
     }
-
 }

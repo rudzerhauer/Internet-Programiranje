@@ -16,6 +16,7 @@ public class RegisterRequest {
     private String slikaAvatara;
     @NotNull
     private String email;
+    private String userType;
     private String brLicneKarte; 
     private String uloga; 
 
@@ -38,4 +39,12 @@ public class RegisterRequest {
     public void setBrLicneKarte(String brLicneKarte) { this.brLicneKarte = brLicneKarte; }
     public String getUloga() { return uloga; }
     public void setUloga(String uloga) { this.uloga = uloga; }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
 }

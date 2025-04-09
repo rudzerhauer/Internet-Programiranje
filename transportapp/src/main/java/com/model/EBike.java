@@ -22,5 +22,8 @@ public class EBike extends Vozilo {
     public Integer getAutonomija() {
         return this.autonomija;
     }
+    public void setAutonomija(Integer autonomija) {
+        this.autonomija = autonomija;
+    }
     
 }

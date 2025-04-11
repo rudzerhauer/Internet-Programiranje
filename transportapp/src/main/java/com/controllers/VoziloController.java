@@ -1,6 +1,9 @@
 package com.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.model.Iznajmljivanje;
+import com.model.Kvar;
 import com.model.Vozilo;
+import com.repositorys.KvarRepository;
 import com.repositorys.VoziloRepository;
 import com.rest.VoziloService;
 
@@ -28,6 +34,9 @@ public class VoziloController {
 
     @Autowired
     VoziloRepository voziloRepository;
+    @Autowired
+    KvarRepository kvarRepository;
+    
 
 
     @GetMapping("/types")
@@ -42,9 +51,21 @@ public class VoziloController {
     }
     @PostMapping("/{type}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Vozilo createVozilo(@PathVariable String type, @RequestBody Vozilo vozilo) {
-        return voziloService.createVozilo(type, vozilo);
+    public ResponseEntity<Vozilo> createVozilo(@PathVariable String type, @RequestBody Map<String, Object> voziloData) {
+        try {
+            Vozilo vozilo = voziloService.createVoziloFromMap(type, voziloData);
+            Vozilo createdVozilo = voziloService.createVozilo(type, vozilo);
+            return ResponseEntity.ok(createdVozilo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
 }
+@GetMapping("/{id}")
+@PreAuthorize("hasRole('ADMINISTRATOR')")
+public Optional<Vozilo> getVoziloById(@PathVariable Integer id) {
+  return voziloService.getVoziloById(id);
+}
+
     
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -64,5 +85,47 @@ public class VoziloController {
     
 
 
+
 }
+    @GetMapping("/{id}/kvarovi")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<List<Kvar>> getKvaroviByVoziloId(@PathVariable Integer id) {
+        Vozilo vozilo = voziloRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Vozilo not found"));
+        return ResponseEntity.ok(vozilo.getKvarovi());
+    }
+    @PostMapping("/{id}/kvarovi")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<Kvar> addKvar(@PathVariable Integer id, @RequestBody Map<String, Object> kvarData) {
+        Vozilo vozilo = voziloRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Vozilo not found"));
+
+        Kvar kvar = new Kvar();
+        kvar.setOpis((String) kvarData.get("opis"));
+        String vrijemeKvaraStr = (String) kvarData.get("vrijemeKvara");
+        if (vrijemeKvaraStr != null) {
+            LocalDateTime vrijemeKvara = LocalDateTime.parse(vrijemeKvaraStr);
+            kvar.setVrijemeKvara(vrijemeKvara);
+        }
+        kvar.setVozilo(vozilo);
+        Kvar savedKvar = kvarRepository.save(kvar);
+        return ResponseEntity.ok(savedKvar);
+    }
+    @DeleteMapping("/kvarovi/{kvarId}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<Void> deleteKvar(@PathVariable Long kvarId) {
+        if (!kvarRepository.existsById(kvarId)) {
+            return ResponseEntity.notFound().build();
+        }
+        kvarRepository.deleteById(kvarId);
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/{id}/iznajmljivanja")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<List<Iznajmljivanje>> getIznajmljivanjaByVoziloId(@PathVariable Integer id) {
+        Vozilo vozilo = voziloRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Vozilo not found"));
+        return ResponseEntity.ok(vozilo.getIznajmljivanja());
+    }
+
 }

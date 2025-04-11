@@ -39,4 +39,13 @@ public class Kvar {
     public Vozilo getVozilo() {
         return this.vozilo;
     }
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
+    public void setVrijemeKvara(LocalDateTime vrijemeKvara) {
+        this.vrijemeKvara = vrijemeKvara;
+    }
+    public void setVozilo(Vozilo vozilo) {
+        this.vozilo = vozilo;
+    }
 }

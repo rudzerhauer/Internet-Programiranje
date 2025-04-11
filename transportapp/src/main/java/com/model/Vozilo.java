@@ -72,9 +72,7 @@ public abstract class Vozilo {
     public void setCijenaNabavke(double cijenaNabavke) {
         this.cijenaNabavke = cijenaNabavke;
     }
-    public void setProizvodjac(Proizvodjac proizvodjac) {
-        this.proizvodjac = proizvodjac;
-    }
+    
     public void setKvarovi(List<Kvar> kvarovi) {
         this.kvarovi = kvarovi;
     }
@@ -89,6 +87,13 @@ public abstract class Vozilo {
 
     public void setIznajmljivanja(List<Iznajmljivanje> iznajmljivanja) {
         this.iznajmljivanja = iznajmljivanja;
+    }
+
+
+
+
+    public void setProizvodjac(Proizvodjac proizvodjac) {
+            this.proizvodjac = proizvodjac;
     }
 
     

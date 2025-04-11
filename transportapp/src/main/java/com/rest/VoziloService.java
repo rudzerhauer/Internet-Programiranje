@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.model.Auto;
 import com.model.EBike;
 import com.model.ETrotinet;
+import com.model.Proizvodjac;
 import com.model.Vozilo;
 import com.repositorys.VoziloRepository;
 
@@ -80,6 +83,36 @@ public class VoziloService {
     public void deleteVozilo(Integer id) {
         voziloRepository.deleteById(id);
     }
+    public Vozilo createVoziloFromMap(String type, Map<String, Object> voziloData) {   //trebam ovo dodati u servis
+        Vozilo vozilo;
+        switch (type) {
+            case "Auto":
+                vozilo = new Auto();
+                ((Auto) vozilo).setModel((String) voziloData.get("model"));
+                ((Auto) vozilo).setOpis((String) voziloData.get("opis"));
+                String datumString = (String) voziloData.get("datumNabavke");
+                LocalDate datumNabavke = LocalDate.parse(datumString);  
+                ((Auto) vozilo).setDatumNabavke(datumNabavke); 
+                break;
+            case "EBike":
+                vozilo = new EBike();
+                ((EBike) vozilo).setAutonomija(((Number) voziloData.get("autonomija")).intValue());
+                break;
+            case "ETrotinet":
+                vozilo = new ETrotinet();
+                ((ETrotinet) vozilo).setMaksBrzina(((Number) voziloData.get("maksBrzina")).intValue());
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid vehicle type: " + type);
+        }
+
+        // Set common fields
+        vozilo.setProizvodjac((Proizvodjac) voziloData.get("proizvodjac"));
+        vozilo.setCijenaNabavke(((Number) voziloData.get("cijenaNabavke")).doubleValue());
+
+        return vozilo;
+    }
+    
 
     public List<Vozilo> uploadVozilaFromCsv(MultipartFile file) throws Exception {
         List<Vozilo> vozila = new ArrayList<>();
@@ -122,5 +155,9 @@ public class VoziloService {
             }
         }
         return voziloRepository.saveAll(vozila);
+    }
+
+    public Optional<Vozilo> getVoziloById(Integer id) {
+        return voziloRepository.findById(id);
     }
 }

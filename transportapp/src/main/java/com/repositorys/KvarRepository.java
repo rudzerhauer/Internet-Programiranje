@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.model.Kvar;
 
 
-public interface KvarRepository extends JpaRepository<Kvar, Integer> {
+public interface KvarRepository extends JpaRepository<Kvar, Long> {
     
 }

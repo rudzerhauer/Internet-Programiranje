@@ -53,6 +53,27 @@ public class Proizvodjac {
     public List getVozila() {
         return this.vozila;
     }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
+    public void setDrzava(String drzava) {
+        this.drzava = drzava;
+    }
+    public void setAdresa(String adresa) {
+        this.adresa = adresa;
+    }
+    public void setTelefon(String telefon) {
+        this.telefon = telefon;
+    }
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 
 }

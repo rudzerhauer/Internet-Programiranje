@@ -3,8 +3,10 @@ package com.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
@@ -22,23 +24,36 @@ import jakarta.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idVozila")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Auto.class, name = "Auto"),
+    @JsonSubTypes.Type(value = EBike.class, name = "EBike"),
+    @JsonSubTypes.Type(value = ETrotinet.class, name = "ETrotinet")
+})
 public abstract class Vozilo {
     public Vozilo() {}
+    
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idVozila;
+    
     private double cijenaNabavke;
-    // Vozilo.java
-    @ManyToOne
+    
     @JoinColumn(name = "proizvodjac_id")
-    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     private Proizvodjac proizvodjac;
+    
+    @JsonProperty("proizvodjacId")
+    private transient Long proizvodjacId; // Add this field for deserialization
+    
     private String slikaPutanja;
-
+    
     private boolean pokvareno;
-    @OneToMany(mappedBy="vozilo", cascade= CascadeType.ALL, fetch= FetchType.EAGER)
+    
+    @OneToMany(mappedBy = "vozilo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Kvar> kvarovi = new ArrayList<>();
-    @OneToMany(mappedBy="vozilo", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    
+    @OneToMany(mappedBy = "vozilo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Iznajmljivanje> iznajmljivanja = new ArrayList<>();
 
     public Vozilo(Integer idVozila, double cijenaNabavke, Proizvodjac proizvodjac) {
@@ -46,29 +61,36 @@ public abstract class Vozilo {
         this.cijenaNabavke = cijenaNabavke;
         this.proizvodjac = proizvodjac;
     }
-   
-
-
 
     public Integer getIdVozila() {
         return this.idVozila;
     }
+    
     public double getCijenaNabavke() {
         return this.cijenaNabavke;
     }
+    
     public Proizvodjac getProizvodjac() {
         return this.proizvodjac;
     }
+    
+    public Long getProizvodjacId() {
+        return proizvodjacId;
+    }
+    
     public boolean isPokvareno() {
         return this.pokvareno;
     }
+    
     @SuppressWarnings("rawtypes")
     public List getKvarovi() {
         return this.kvarovi;
     }
+    
     public void setIdVozila(Integer idVozila) {
         this.idVozila = idVozila;
     }
+    
     public void setCijenaNabavke(double cijenaNabavke) {
         this.cijenaNabavke = cijenaNabavke;
     }
@@ -89,12 +111,11 @@ public abstract class Vozilo {
         this.iznajmljivanja = iznajmljivanja;
     }
 
-
-
-
     public void setProizvodjac(Proizvodjac proizvodjac) {
-            this.proizvodjac = proizvodjac;
+        this.proizvodjac = proizvodjac;
     }
-
     
+    public void setProizvodjacId(Long proizvodjacId) {
+        this.proizvodjacId = proizvodjacId;
+    }
 }

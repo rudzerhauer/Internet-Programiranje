@@ -2,6 +2,7 @@ package com.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 
 @Embeddable
 public class Lokacija {
@@ -39,6 +40,15 @@ public class Lokacija {
     public Double getLatitudeVracanje() {
         return latitudeVracanje;
     }
+    @Transient
+public Double getLatitude() {
+    return latitudePreuzimanje;
+}
+
+@Transient
+public Double getLongitude() {
+    return longitudePreuzimanje;
+}
 
     public void setLatitudeVracanje(double latitudeVracanje) {
         this.latitudeVracanje = latitudeVracanje;

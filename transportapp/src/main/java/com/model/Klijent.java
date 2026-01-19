@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -20,9 +21,10 @@ public class Klijent extends Korisnik {
   
     @Column(name="br_licne_karte")
     private String brLicneKarte;
+    boolean blokiran = false;
     
     
-    @OneToMany(mappedBy="klijent", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="klijent", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
      @JsonManagedReference  // Mark this as the "managed" side of the relationship
      private List<Iznajmljivanje> iznajmljivanja = new ArrayList<>();
     
@@ -47,6 +49,14 @@ public class Klijent extends Korisnik {
 
     public void setBrLicneKarte(String brLicneKarte2) {
         this.brLicneKarte = brLicneKarte2;
+    }
+
+    public boolean isBlokiran() {
+        return blokiran;
+    }
+
+    public void setBlokiran(boolean blokiran) {
+        this.blokiran = blokiran;
     }
 
     

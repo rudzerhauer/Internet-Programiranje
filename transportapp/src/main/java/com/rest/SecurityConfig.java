@@ -26,8 +26,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll() // Allow public access to auth endpoints
-                .requestMatchers("/api/vozila/**").hasRole("ADMINISTRATOR") // Restrict vozila endpoints to ADMINISTRATOR
+                .requestMatchers("/api/**").permitAll()
+               
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

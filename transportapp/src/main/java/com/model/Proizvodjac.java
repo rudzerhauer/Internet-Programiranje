@@ -2,7 +2,9 @@ package com.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Proizvodjac {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,8 +26,8 @@ public class Proizvodjac {
     private String fax;
     private String email;
    // Proizvodjac.java
-    @OneToMany(mappedBy = "proizvodjac")
-    @JsonManagedReference
+   @OneToMany(mappedBy = "proizvodjac")
+   @JsonIgnore
     private List<Vozilo> vozila;
 
 

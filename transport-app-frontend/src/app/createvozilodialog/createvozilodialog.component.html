@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Add New Vehicle</h2>
+<mat-dialog-content>
+  <form>
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <input matInput [(ngModel)]="vozilo.type" name="type" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cijena Nabavke</mat-label>
+      <input matInput type="number" [(ngModel)]="vozilo.cijenaNabavke" name="cijenaNabavke" required>
+    </mat-form-field>
+
+    <!-- Auto-specific fields -->
+    <ng-container *ngIf="vozilo.type === 'Auto'">
+      <mat-form-field>
+        <mat-label>Datum Nabavke</mat-label>
+        <input matInput type="date" [(ngModel)]="vozilo.datumNabavke" name="datumNabavke" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Model</mat-label>
+        <input matInput [(ngModel)]="vozilo.model" name="model" required>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Opis</mat-label>
+        <input matInput [(ngModel)]="vozilo.opis" name="opis" required>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- EBike-specific fields -->
+    <ng-container *ngIf="vozilo.type === 'EBike'">
+      <mat-form-field>
+        <mat-label>Autonomija</mat-label>
+        <input matInput type="number" [(ngModel)]="vozilo.autonomija" name="autonomija" required>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- ETrotinet-specific fields -->
+    <ng-container *ngIf="vozilo.type === 'ETrotinet'">
+      <mat-form-field>
+        <mat-label>Maks Brzina</mat-label>
+        <input matInput type="number" [(ngModel)]="vozilo.maksBrzina" name="maksBrzina" required>
+      </mat-form-field>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button [mat-dialog-close]="vozilo" [disabled]="!vozilo.cijenaNabavke">Save</button>
+</mat-dialog-actions>

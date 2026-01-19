@@ -1,0 +1,14 @@
+table {
+    width:100%;
+    position:absolute;
+    top:128px;
+    bottom:0;
+    left:0;
+    right:0;
+
+
+}
+.right-button {
+    position:absolute;
+    right:8px;
+}

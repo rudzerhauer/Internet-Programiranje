@@ -1,0 +1,43 @@
+.right-link {
+    right:4px;
+    position:absolute;
+    top:4px;
+    color:white;
+}
+
+.link {
+    text-decoration: none;
+    font-size:12px;
+    padding:8px;
+
+}
+.main-title {
+    top:0px;
+    left:8px;
+    position:absolute;
+    color:white;
+}
+.main-content {
+    position:absolute;
+    top:500px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content:space-evenly;
+    margin-bottom:16px;
+}
+.info-card {
+    min-width: 30%;
+    background-color: blue;
+    color: white;
+    min-height: 300px;
+}
+
+.event {
+    background-color: aqua;
+    padding: 8px;
+    margin:4px;
+    text-align: center;
+}

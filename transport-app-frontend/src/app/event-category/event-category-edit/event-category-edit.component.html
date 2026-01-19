@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Nova kategorija</h1>
+<form [formGroup]="form">
+    <div mat-dialog-content class="create-form">
+        <mat-form-field>
+            <input matInput placeholder="Naziv" requried formControlName="name" autocomplete="off"/>
+        </mat-form-field>
+    </div>
+    <div>
+        <button mat-button (click)="close()">Odustani</button>
+        <button mat-button [disabled]="form.invalid" type="submit" (click)="save(form)">Sacuvaj</button>
+    </div>
+</form>
+    

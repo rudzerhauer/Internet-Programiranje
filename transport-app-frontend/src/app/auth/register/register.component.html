@@ -1,0 +1,58 @@
+<!-- register.component.html -->
+<div class="register-container">
+    <h2>Register</h2>
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="form-group">
+        <label for="userType">User Type</label>
+        <select id="userType" name="userType" [(ngModel)]="userType" required class="form-control">
+          <option value="KLIJENT">Client</option>
+          <option value="ZAPOSLENI">Employee</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" [(ngModel)]="username" required class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="ime">First Name</label>
+        <input type="text" id="ime" name="ime" [(ngModel)]="ime" required class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="prezime">Last Name</label>
+        <input type="text" id="prezime" name="prezime" [(ngModel)]="prezime" required class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="brTelefona">Phone Number</label>
+        <input type="text" id="brTelefona" name="brTelefona" [(ngModel)]="brTelefona" class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" [(ngModel)]="email" class="form-control" />
+      </div>
+  
+      <div class="form-group" *ngIf="userType === 'KLIJENT'">
+        <label for="brLicneKarte">ID Card Number</label>
+        <input type="text" id="brLicneKarte" name="brLicneKarte" [(ngModel)]="brLicneKarte" required class="form-control" />
+      </div>
+  
+      <div class="form-group" *ngIf="userType === 'ZAPOSLENI'">
+        <label for="uloga">Role</label>
+        <input type="text" id="uloga" name="uloga" [(ngModel)]="uloga" required class="form-control" />
+      </div>
+  
+      <button type="submit" [disabled]="registerForm.invalid" class="btn">Register</button>
+    </form>
+  
+    <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </div>

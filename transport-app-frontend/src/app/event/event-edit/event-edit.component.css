@@ -1,0 +1,11 @@
+.create-form {
+    display:flex;
+    flex-direction: column;
+
+    .row {
+        display:flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+}

@@ -1,0 +1,56 @@
+<a routerLink="/auth/login" class="link right-link" routerLinkActive="primary">Prijava</a>
+
+<img src="/assets/home.jpg" width="100%" height="1000px"/>
+<div class="main-title">
+    <h1>Banja Luka dogadjaji</h1>
+    <p style="width:200px">Ovaj sajt je bla bla</p>
+</div>
+<div class="main-content">
+    <mat-card class="info-card">
+        <mat-card-header>
+            <mat-card-title>
+                Danasnji dogadaji
+                <a routerLink="/auth/register" class="link right-link" routerLinkActive="primary">Registracija</a>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p *ngIf="eventsToday.length == 0">Nema dogadjaja</p>
+            <div class="event" *ngFor="let event of eventsToday">
+                <h3>{{event.name}}</h3>
+                <p>{{event.category?.name}}</p>
+                <p *ngIf="event.image">
+                    <img [src]="event.image" width="200" />
+                </p>
+                <p>{{event.description}}</p>
+                <p>{{event.date | date:'dd.MM.yyyy'}} {{event.time}}</p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="info-card">
+        <mat-card-header>
+            <mat-card-title>
+                Najave
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field>
+                <mat-label>Kategorija</mat-label>
+                <mat-select (selectionChange)="filterCategory($event)">
+                    <mat-option *ngFor="let category of categories" [value]="category">
+                        {{category.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <p *ngIf="events.length == 0">Nema dogadjaja</p>
+            <div class="event" *ngFor="let event of events">
+                <h3>{{event.name}}</h3>
+                <p>{{event.category?.name}}</p>
+                <p *ngIf="event.image">
+                    <img [src]="event.image" width="200"/>
+                </p>
+                <p>{{event.description}}</p>
+                <p>{{event.date | date:'dd.MM.yyyy'}} {{event.time}}</p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
